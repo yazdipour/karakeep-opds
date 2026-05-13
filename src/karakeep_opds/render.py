@@ -66,22 +66,16 @@ def render_opds2_catalog(base_url: str) -> dict:
         ],
         "navigation": [
             {
-                "metadata": {"title": "Recent bookmarks"},
-                "links": [
-                    {
-                        "href": f"{base_url}/opds2/recent",
-                        "type": "application/opds+json",
-                    }
-                ],
+                "title": "Recent bookmarks",
+                "href": f"{base_url}/opds2/recent",
+                "type": "application/opds+json",
+                "rel": "current"
             },
             {
-                "metadata": {"title": "Search bookmarks"},
-                "links": [
-                    {
-                        "href": f"{base_url}/opds2/search?{urlencode({'q': ''})}",
-                        "type": "application/opds+json",
-                    }
-                ],
+                "title": "Search bookmarks",
+                "href": f"{base_url}/opds2/search?{urlencode({'q': ''})}",
+                "type": "application/opds+json",
+                "rel": "search"
             },
         ],
     }
