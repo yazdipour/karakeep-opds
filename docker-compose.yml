@@ -1,0 +1,13 @@
+services:
+  karakeep-opds:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      KARAKEEP_BASE_URL: ${KARAKEEP_BASE_URL}
+      KARAKEEP_API_TOKEN: ${KARAKEEP_API_TOKEN}
+      KARAKEEP_API_PATH: ${KARAKEEP_API_PATH:-/api/v1}
+      OPDS_USERNAME: ${OPDS_USERNAME}
+      OPDS_PASSWORD: ${OPDS_PASSWORD}
+      OPDS_PAGE_SIZE: "50"
+      SERVICE_BASE_URL: ${SERVICE_BASE_URL}
