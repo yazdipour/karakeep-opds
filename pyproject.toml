@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Expose Karakeep bookmarks as OPDS 1.2 and OPDS 2 feeds."
 readme = "README.md"
 requires-python = ">=3.11"
-license = "MIT"
+license = "GPL-3.0-or-later"
 authors = [{ name = "karakeep-opds contributors" }]
 dependencies = [
   "beautifulsoup4>=4.12.0",

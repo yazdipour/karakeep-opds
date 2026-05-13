@@ -28,6 +28,20 @@ Copy `.env.example` to `.env` and set:
 | `OPDS_PAGE_SIZE` | no | Page size sent to Karakeep, default `50` |
 | `SERVICE_BASE_URL` | no | Public origin for generated links behind reverse proxies |
 
+## Quick Setup
+
+Create your `.env` file, then create a `docker-compose.yml`:
+
+```yaml
+services:
+  karakeep-opds:
+    image: ghcr.io/yazdipour/karakeep-opds:latest
+    ports:
+      - "8000:8000"
+    env_file: .env
+```
+Run `docker compose up -d`.
+
 ## Run locally
 
 ```bash
@@ -80,3 +94,11 @@ encoded, not encrypted, on plain HTTP.
 pytest
 ruff check .
 ```
+
+## AI Acknowledgment
+
+This project was built with the assistance of AI tools for code generation and refactoring.
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0 (GPLv3)](LICENSE).
