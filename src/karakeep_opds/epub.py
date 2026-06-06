@@ -12,6 +12,7 @@ from ebooklib import epub
 from karakeep_opds.models import FeedItem
 
 EPUB_IMAGE_MEDIA_TYPES = {"image/gif", "image/jpeg", "image/png"}
+EPUB_WRITE_OPTIONS = {"raise_exceptions": True, "compresslevel": 9}
 
 
 def render_epub(
@@ -44,7 +45,8 @@ def render_epub(
         media_type="text/css",
         content=(
             "body { font-family: serif; line-height: 1.45; padding: 0 1em; }\n"
-            "h1, h2, h3, h4, h5, h6 { font-family: sans-serif; line-height: 1.2; margin-top: 1.2em; margin-bottom: 0.6em; font-weight: bold; }\n"
+            "h1, h2, h3, h4, h5, h6 { font-family: sans-serif; line-height: 1.2; "
+            "margin-top: 1.2em; margin-bottom: 0.6em; font-weight: bold; }\n"
             "h1 { font-size: 1.75em; border-bottom: 1px solid #ddd; padding-bottom: 0.3em; }\n"
             "h2 { font-size: 1.5em; }\n"
             "h3 { font-size: 1.25em; }\n"
@@ -52,9 +54,11 @@ def render_epub(
             "em, i { font-style: italic; }\n"
             "img { max-width: 100%; height: auto; display: block; margin: 1em auto; }\n"
             "figure { margin: 1em 0; text-align: center; }\n"
-            "blockquote { border-left: 3px solid #ccc; margin: 1em 0; padding-left: 1em; font-style: italic; }\n"
+            "blockquote { border-left: 3px solid #ccc; margin: 1em 0; padding-left: 1em; "
+            "font-style: italic; }\n"
             "pre { background: #f4f4f4; padding: 1em; overflow-x: auto; font-family: monospace; }\n"
-            "code { font-family: monospace; background: #f4f4f4; padding: 0.1em 0.3em; border-radius: 3px; }\n"
+            "code { font-family: monospace; background: #f4f4f4; padding: 0.1em 0.3em; "
+            "border-radius: 3px; }\n"
             "a { color: #0056b3; text-decoration: none; }\n"
             "a:hover { text-decoration: underline; }\n"
             "hr { border: 0; border-top: 1px solid #ddd; margin: 2em 0; }\n"
@@ -72,7 +76,7 @@ def render_epub(
     book.toc = (epub.Link("content.xhtml", item.title, "content"),)
 
     buffer = BytesIO()
-    epub.write_epub(buffer, book, options={"raise_exceptions": True})
+    epub.write_epub(buffer, book, options=EPUB_WRITE_OPTIONS)
     return buffer.getvalue()
 
 

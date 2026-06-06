@@ -1,6 +1,9 @@
 from datetime import UTC, datetime
-from zipfile import ZipFile
+from zipfile import ZIP_STORED, ZipFile
 
+from ebooklib import epub
+
+import karakeep_opds.epub
 from karakeep_opds.epub import render_epub
 from karakeep_opds.models import FeedItem
 
@@ -42,6 +45,54 @@ def test_render_epub_embeds_article_html_and_image(tmp_path) -> None:
     assert "style/book.css" in content
     assert "bad()" not in content
     assert "images/image-1.jpg" in package
+
+
+def test_render_epub_uses_max_zip_compression(monkeypatch) -> None:
+    write_options = None
+    original_write_epub = epub.write_epub
+
+    def capture_write_options(name, book, options=None):
+        nonlocal write_options
+        write_options = options
+        return original_write_epub(name, book, options=options)
+
+    monkeypatch.setattr(karakeep_opds.epub.epub, "write_epub", capture_write_options)
+
+    item = FeedItem(
+        id="abc",
+        kind="text",
+        title="Compressed",
+        updated=datetime(2026, 1, 1, tzinfo=UTC),
+        summary=None,
+        url=None,
+        content="\n".join(["Repeated content for compression."] * 100),
+        author=None,
+    )
+
+    render_epub(item)
+
+    assert write_options == {"raise_exceptions": True, "compresslevel": 9}
+
+
+def test_render_epub_stores_mimetype_uncompressed(tmp_path) -> None:
+    item = FeedItem(
+        id="abc",
+        kind="text",
+        title="Compressed",
+        updated=datetime(2026, 1, 1, tzinfo=UTC),
+        summary=None,
+        url=None,
+        content="Body",
+        author=None,
+    )
+
+    epub_path = tmp_path / "book.epub"
+    epub_path.write_bytes(render_epub(item))
+
+    with ZipFile(epub_path) as epub:
+        mimetype = epub.getinfo("mimetype")
+
+    assert mimetype.compress_type == ZIP_STORED
 
 
 def test_render_epub_drops_repeated_title_from_body(tmp_path) -> None:
